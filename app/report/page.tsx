@@ -355,8 +355,8 @@ export default function ReportPage() {
           <div className="mb-6">
             <p className="text-[10px] font-extrabold text-white/30 uppercase tracking-widest mb-3">Co-op Mission Highlights</p>
             <div className="flex flex-col gap-2.5">
-              {coopSessions.map(s => (
-                <div key={s.id} className="rounded-2xl p-4 flex items-center gap-3" style={{ background: 'rgba(83,74,183,0.12)', border: '1px solid rgba(167,159,255,0.2)' }}>
+              {coopSessions.map((s, i) => (
+                <div key={`${s.id}-${i}`} className="rounded-2xl p-4 flex items-center gap-3" style={{ background: 'rgba(83,74,183,0.12)', border: '1px solid rgba(167,159,255,0.2)' }}>
                   <div className="w-8 h-8 rounded-xl bg-[#534AB7]/30 flex items-center justify-center flex-shrink-0 text-base">🎯</div>
                   <div className="flex-1 min-w-0">
                     <p className="font-extrabold text-white text-sm truncate">{s.questTitle}</p>
