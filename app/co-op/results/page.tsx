@@ -183,7 +183,7 @@ export default function ResultsPage() {
               <p className="text-xs font-extrabold text-white/40 uppercase tracking-widest">Your achievements</p>
               <h1 className="text-2xl font-extrabold text-white">Badges earned</h1>
             </div>
-            <button onClick={() => setPhase('nextup')} className="text-xs font-bold text-white/40 hover:text-white transition-colors flex-shrink-0">Skip</button>
+            <button onClick={() => router.push('/progress')} className="text-xs font-bold text-white/40 hover:text-white transition-colors flex-shrink-0">Skip</button>
           </div>
 
           <div className="flex flex-col gap-3 mb-6">
