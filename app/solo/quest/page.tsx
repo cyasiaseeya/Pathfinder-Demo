@@ -150,7 +150,7 @@ export default function QuestPage() {
         i++;
         setMessages((p) => {
           const updated = [...p];
-          updated[updated.length - 1] = { role: 'assistant', content: display.slice(0, i) };
+          updated[updated.length - 1] = { role: 'assistant', content: display.slice(0, i), id: newId };
           return updated;
         });
         if (i >= display.length) {
