@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Users, Home, BookOpen, Heart, Check } from 'lucide-react';
 import Link from 'next/link';
-import { GOALS, LIFE_AREAS } from '@/lib/missions';
+import { GOALS, LIFE_AREAS, type LifeArea } from '@/lib/missions';
 
 const PILLAR_STYLE = {
   'Intrapersonal EQ': { bg: '#EEEDFE', text: '#534AB7' },
@@ -23,10 +23,10 @@ const AREA_COLORS = {
 
 export default function SoloPage() {
   const router = useRouter();
-  const [area, setArea] = useState('');
+  const [area, setArea] = useState<LifeArea | ''>('');
   const [goalIdx, setGoalIdx] = useState(-1);
 
-  function AreaIcon({ id, size }) {
+  function AreaIcon({ id, size }: { id: string; size: number }) {
     if (id === 'friends') return <Users size={size} />;
     if (id === 'family')  return <Home size={size} />;
     if (id === 'school')  return <BookOpen size={size} />;
@@ -47,7 +47,7 @@ export default function SoloPage() {
 
   const goals = area ? GOALS[area] : [];
   const selectedGoal = area && goalIdx >= 0 ? GOALS[area][goalIdx] : null;
-  const ac = area ? AREA_COLORS[area] : null;
+  const ac = area ? AREA_COLORS[area as LifeArea] : null;
 
   return (
     <div className="min-h-screen bg-black/30">
@@ -112,15 +112,15 @@ export default function SoloPage() {
               <h2 className="text-sm font-extrabold text-white uppercase tracking-widest">Pick your goal</h2>
             </div>
             <div className="grid grid-cols-3 gap-4">
-              {goals.map((goal, i) => {
-                const ps = PILLAR_STYLE[goal.pillar] || { bg: '#EAF3DE', text: '#639922' };
+              {goals.map((goal: { title: string; desc: string; pillar: string }, i: number) => {
+                const ps = PILLAR_STYLE[goal.pillar as keyof typeof PILLAR_STYLE] || { bg: '#EAF3DE', text: '#639922' };
                 const active = goalIdx === i;
                 return (
                   <button key={i} onClick={() => setGoalIdx(i)}
                     className="text-left rounded-3xl p-5 border-2 bg-white transition-all hover:-translate-y-0.5"
                     style={{
-                      borderColor: active ? ac.color : '#E8E6F8',
-                      boxShadow: active ? `0 8px 24px ${ac.color}20` : '0 1px 4px rgba(0,0,0,0.05)',
+                    borderColor: active ? ac!.color : '#E8E6F8',
+                    boxShadow: active ? `0 8px 24px ${ac!.color}20` : '0 1px 4px rgba(0,0,0,0.05)',
                     }}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -128,7 +128,7 @@ export default function SoloPage() {
                         style={{ backgroundColor: ps.bg, color: ps.text }}>{goal.pillar}</span>
                       {active && (
                         <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-                          style={{ background: ac.grad }}>
+                          style={{ background: ac!.grad }}>
                           <Check size={12} className="text-white" />
                         </div>
                       )}
@@ -148,8 +148,8 @@ export default function SoloPage() {
             <button onClick={handleStart} disabled={!selectedGoal}
               className="flex items-center gap-2.5 px-8 py-4 rounded-2xl font-extrabold text-base text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:-translate-y-0.5"
               style={{
-                background: selectedGoal ? ac.grad : '#C5C3E0',
-                boxShadow: selectedGoal ? `0 8px 24px ${ac.color}40` : 'none',
+                background: selectedGoal ? ac!.grad : '#C5C3E0',
+                boxShadow: selectedGoal ? `0 8px 24px ${ac!.color}40` : 'none',
               }}
             >
               {selectedGoal ? `Start — ${selectedGoal.title}` : 'Select a goal above'}
