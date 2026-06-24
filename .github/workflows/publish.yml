@@ -1,0 +1,31 @@
+name: Deploy Ark Reactor
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/GithubActions
+          aws-region: ap-northeast-2
+
+      - name: Upload folder to S3
+        run: |
+          aws s3 sync . s3://${{ vars.AWS_S3_BUCKET }}/ --delete
+
+      - name: Invalidate Distribution Cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

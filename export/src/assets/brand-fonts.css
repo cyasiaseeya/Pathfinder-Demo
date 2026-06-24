@@ -1,0 +1,31 @@
+/* Ark Academy — Brand typeface
+   CY Grotesk Wide · Thin · Light · Medium
+   Used for display-scale type (hero, section titles, big numbers) */
+
+@font-face{
+  font-family:"CY Grotesk Wide";
+  src: url("cy-grotesk-wide-thin.ttf") format("truetype");
+  font-weight: 100 250;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family:"CY Grotesk Wide";
+  src: url("cy-grotesk-wide-light.ttf") format("truetype");
+  font-weight: 300 350;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family:"CY Grotesk Wide";
+  src: url("cy-grotesk-wide-medium.ttf") format("truetype");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Utility class for one-off use */
+.cy-wide{
+  font-family:"CY Grotesk Wide", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
