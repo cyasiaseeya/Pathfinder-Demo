@@ -1,17 +1,23 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
+
+interface Star { id: number; x: number; y: number; size: number; delay: number; duration: number; baseOpacity: number; }
 
 export default function SpaceBackground() {
-  const stars = useMemo(() => Array.from({ length: 90 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2.5 + 0.5,
-    delay: Math.random() * 5,
-    duration: Math.random() * 2 + 2,
-    baseOpacity: Math.random() * 0.4 + 0.3,
-  })), []);
+  const [stars, setStars] = useState<Star[]>([]);
+
+  useEffect(() => {
+    setStars(Array.from({ length: 90 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2.5 + 0.5,
+      delay: Math.random() * 5,
+      duration: Math.random() * 2 + 2,
+      baseOpacity: Math.random() * 0.4 + 0.3,
+    })));
+  }, []);
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none"
