@@ -9,12 +9,12 @@ import type { BraveTry } from '@/lib/state';
 
 interface Mission { title: string; description: string; pillar: string; }
 
-const PILLAR_STYLE: Record<string, { bg: string; text: string; border: string }> = {
-  'Intrapersonal EQ': { bg: '#EEEDFE', text: '#534AB7', border: '#AFA9EC' },
-  'Interpersonal EQ': { bg: '#E1F5EE', text: '#1D9E75', border: '#5DCAA5' },
-  'Communication':    { bg: '#FAECE7', text: '#D85A30', border: '#F0997B' },
-  'Adaptability':     { bg: '#FAEEDA', text: '#BA7517', border: '#EF9F27' },
-  'Growth Mindset':   { bg: '#EAF3DE', text: '#639922', border: '#97C459' },
+const PILLAR_STYLE: Record<string, { color: string; border: string }> = {
+  'Intrapersonal EQ': { color: '#A79FFF', border: '#A79FFF' },
+  'Interpersonal EQ': { color: '#2AB58A', border: '#2AB58A' },
+  'Communication':    { color: '#F0997B', border: '#E8714A' },
+  'Adaptability':     { color: '#EF9F27', border: '#EF9F27' },
+  'Growth Mindset':   { color: '#7ABF3A', border: '#7ABF3A' },
 };
 
 export default function MissionPage() {
@@ -124,7 +124,7 @@ export default function MissionPage() {
 
         {/* Header */}
         <div className="flex items-start gap-4 mb-8">
-          <div className="w-12 h-12 bg-[#534AB7] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-200">
+          <div className="w-12 h-12 bg-[#534AB7] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-900/40">
             <Rocket size={22} className="text-white" />
           </div>
           <div className="flex-1">
@@ -142,10 +142,10 @@ export default function MissionPage() {
         {loading ? (
           <div className="flex flex-col gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 border border-[#E8E6F8] animate-pulse">
-                <div className="h-4 bg-black/20 rounded-full w-1/2 mb-3" />
-                <div className="h-3 bg-black/20 rounded-full mb-1.5" />
-                <div className="h-3 bg-black/20 rounded-full w-3/4" />
+              <div key={i} className="rounded-2xl p-5 animate-pulse" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div className="h-4 bg-white/10 rounded-full w-1/2 mb-3" />
+                <div className="h-3 bg-white/10 rounded-full mb-1.5" />
+                <div className="h-3 bg-white/10 rounded-full w-3/4" />
               </div>
             ))}
             <p className="text-center text-sm font-semibold text-white/50 animate-pulse mt-1">
@@ -157,18 +157,18 @@ export default function MissionPage() {
             {missions.map((m, i) => {
               const s = PILLAR_STYLE[m.pillar] || PILLAR_STYLE['Growth Mindset'];
               return (
-                <div key={i} className="bg-white rounded-2xl border border-[#E8E6F8] p-5 slide-up"
-                  style={{ animationDelay: `${i * 0.12}s`, borderLeft: `4px solid ${s.border}` }}>
+                <div key={i} className="rounded-2xl p-5 slide-up"
+                  style={{ animationDelay: `${i * 0.12}s`, background: 'rgba(255,255,255,0.06)', border: `1px solid ${s.border}30`, borderLeft: `3px solid ${s.border}` }}>
                   <div className="flex items-start gap-3">
                     <div className="w-7 h-7 rounded-xl flex items-center justify-center text-sm font-extrabold flex-shrink-0"
-                      style={{ backgroundColor: s.bg, color: s.text }}>
+                      style={{ background: `${s.color}20`, color: s.color }}>
                       {i + 1}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-extrabold text-[#2D2B4E] mb-1">{m.title}</h3>
-                      <p className="text-sm text-[#6B6893] font-semibold leading-relaxed mb-2">{m.description}</p>
+                      <h3 className="font-extrabold text-white mb-1">{m.title}</h3>
+                      <p className="text-sm text-white/55 font-semibold leading-relaxed mb-2">{m.description}</p>
                       <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wide"
-                        style={{ backgroundColor: s.bg, color: s.text }}>
+                        style={{ background: `${s.color}20`, color: s.color }}>
                         {m.pillar}
                       </span>
                     </div>
@@ -186,7 +186,7 @@ export default function MissionPage() {
             </p>
             <button
               onClick={handleDone}
-              className="w-full bg-[#534AB7] hover:bg-[#3C3489] text-white rounded-2xl py-4 font-extrabold text-base transition-all shadow-lg shadow-purple-200 flex items-center justify-center gap-2"
+              className="w-full bg-[#534AB7] hover:bg-[#6B61D0] text-white rounded-2xl py-4 font-extrabold text-base transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2"
             >
               See my progress
               <ArrowRight size={18} />

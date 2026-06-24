@@ -19,9 +19,10 @@ RULES:
 export async function POST(req: Request) {
   const { messages, questTitle } = await req.json();
 
-  const safeMessages = messages && messages.length > 0
+  const safeMessages = (messages && messages.length > 0
     ? messages
-    : [{ role: 'user', content: "Hi, I'm ready to start." }];
+    : [{ role: 'user', content: "Hi, I'm ready to start." }]
+  ).map(({ role, content }: { role: string; content: string }) => ({ role, content }));
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-5',

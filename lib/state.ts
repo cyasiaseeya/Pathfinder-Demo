@@ -26,6 +26,25 @@ export interface Session {
   crewScore?: number;
 }
 
+export interface ArkMissionRecord {
+  id: number;           // 1–4
+  completed: boolean;
+  crewScore?: number;
+  date?: string;
+  weakPillars?: string[];  // pillar keys where co-op performance was low
+}
+
+export interface CoopFeedback {
+  missionId: number;
+  weakPillars: string[];        // pillar keys to improve
+  recommendedQuests: string[];  // solo quest titles to try next
+  date: string;
+}
+
+export interface SoloReadiness {
+  [missionId: number]: string[];  // quest titles completed as prep for that mission
+}
+
 export interface PathfindersState {
   childName: string;
   entitlement: 'free' | 'paid';
@@ -40,6 +59,11 @@ export interface PathfindersState {
   achievements: string[];
   braveTries: BraveTry[];
   sessionHistory: Session[];
+  // Ark mission loop state
+  currentArkMission: number;       // 1–4, which mission they are prepping for
+  arkMissions: ArkMissionRecord[]; // history of completed co-op Ark missions
+  soloReadiness: SoloReadiness;    // prep quest completions per Ark mission
+  coopFeedback: CoopFeedback | null; // most recent co-op gap analysis
 }
 
 const XP_THRESHOLDS = [100, 150, 220, 320, 450];
@@ -58,12 +82,20 @@ export const defaultState: PathfindersState = {
   achievements: [],
   braveTries: [],
   sessionHistory: [],
+  currentArkMission: 1,
+  arkMissions: [],
+  soloReadiness: {},
+  coopFeedback: null,
 };
 
 const SEED_STATE: PathfindersState = {
   childName: '',
   entitlement: 'paid',
   sessionsCompleted: 2,
+  currentArkMission: 1,
+  arkMissions: [],
+  soloReadiness: { 1: ['Bounce back from a bad grade'] },
+  coopFeedback: null,
   pillars: {
     intrapersonal: { level: 1, xp: 65, xpToNext: 150 },
     interpersonal: { level: 0, xp: 80, xpToNext: 100 },
@@ -188,4 +220,43 @@ export function addXP(
 export function unlockAchievement(state: PathfindersState, id: string): PathfindersState {
   if (state.achievements.includes(id)) return state;
   return { ...state, achievements: [...state.achievements, id] };
+}
+
+export function markSoloPrep(
+  state: PathfindersState,
+  missionId: number,
+  questTitle: string
+): PathfindersState {
+  const existing = state.soloReadiness[missionId] || [];
+  if (existing.includes(questTitle)) return state;
+  return {
+    ...state,
+    soloReadiness: {
+      ...state.soloReadiness,
+      [missionId]: [...existing, questTitle],
+    },
+  };
+}
+
+export function completeArkMission(
+  state: PathfindersState,
+  missionId: number,
+  crewScore: number,
+  weakPillars: string[]
+): PathfindersState {
+  const existing = (state.arkMissions ?? []).filter((m) => m.id !== missionId);
+  return {
+    ...state,
+    arkMissions: [
+      ...existing,
+      { id: missionId, completed: true, crewScore, date: new Date().toISOString(), weakPillars },
+    ],
+    currentArkMission: 1, // Demo: always loop back to Mission 001
+    coopFeedback: {
+      missionId,
+      weakPillars,
+      recommendedQuests: [],
+      date: new Date().toISOString(),
+    },
+  };
 }
